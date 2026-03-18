@@ -14,6 +14,16 @@ load_dotenv()
 # Database URL configuration
 DATABASE_URL = os.getenv("DATABASE_URL")
 
+# DO App Platform may provide URLs starting with "postgres://" which
+# SQLAlchemy 1.4+ requires as "postgresql://"
+if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+# If DATABASE_URL looks like an unresolved App Platform variable, ignore it
+if DATABASE_URL and DATABASE_URL.startswith("${"):
+    print(f"[WARN] DATABASE_URL looks unresolved: {DATABASE_URL}, falling back")
+    DATABASE_URL = None
+
 # For production, use PostgreSQL with SSL
 if not DATABASE_URL:
     POSTGRES_USER = os.getenv("POSTGRES_DB_USERNAME", "doadmin")

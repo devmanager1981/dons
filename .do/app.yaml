@@ -36,6 +36,8 @@ services:
         type: SECRET
       - key: DATABASE_URL
         value: ${db.DATABASE_URL}
+      - key: FRONTEND_URL
+        value: ${streamlit.PUBLIC_URL}
     health_check:
       http_path: /health
       initial_delay_seconds: 15
